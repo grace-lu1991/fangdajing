@@ -2,86 +2,115 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
-    .box {
-      width: 450px;
-      height: 450px;
-      border: 1px solid #aaa;
-      position: relative;
-      top: 100px;
-      left: 100px;
-    }
+        .box {
+            width: 450px;
+            height: 450px;
+            border: 1px solid #aaa;
+            position: relative;
+            top: 100px;
+            left: 100px;
+        }
 
-    .small {
-      width: 450px;
-      height: 450px;
-      position: absolute;
-    }
+        .small {
+            width: 450px;
+            height: 450px;
+            position: absolute;
+        }
 
-    .mask {
-      position: absolute;
-      background-color: rgba(255, 255, 0, .3);
-      width: 225px;
-      height: 225px;
-      top: 0;
-      left: 0;
-      display: none;
-    }
+        .mask {
+            position: absolute;
+            background-color: rgba(255, 255, 0, .3);
+            width: 225px;
+            height: 225px;
+            top: 0;
+            left: 0;
+            display: none;
+        }
 
-    .big {
-      width: 450px;
-      height: 450px;
-      border: 1px solid #aaa;
-      position: absolute;
-      left: 500px;
-      top: 0;
-      overflow: hidden;
-      display: none;
-    }
+        .big {
+            width: 450px;
+            height: 450px;
+            border: 1px solid #aaa;
+            position: absolute;
+            left: 500px;
+            top: 0;
+            overflow: hidden;
+            display: none;
+        }
 
-    .big>img {
-      width: 900px;
-      height: 900px;
-      position: absolute;
-    }
-  </style>
+        .big>img {
+            width: 900px;
+            height: 900px;
+            position: absolute;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="box">
-    <div class="small">
-      <img src="./images/s.jpg" alt="">
-      <div class="mask"></div>
+    <div class="box">
+        <div class="small">
+            <img src="./images/s.jpg" alt="">
+            <div class="mask"></div>
+        </div>
+        <div class="big">
+            <img src="./images/big.jpg" alt="">
+        </div>
     </div>
-    <div class="big">
-      <img src="./images/big.jpg" alt="">
-    </div>
-  </div>
 </body>
 <script>
-let small=document.querySelector('.small');
-let mask=document.querySelector('.mask');
-let big=document.querySelector('.big');
-small.onmouseover=function(){
-mask.style.display='block'
-big.style.display='block'
-}
-small.onmouseout=function(){
-mask.style.display='none'
-big.style.display='none'
-}
+    let small = document.querySelector('.small');
+    let mask = document.querySelector('.mask');
+    let big = document.querySelector('.big');
+    let box = document.querySelector('.box');
+    let bigimg=document.querySelector('.big>img');
+    small.onmouseover = function () {
+        mask.style.display = 'block'
+        big.style.display = 'block'
+    }
+    small.onmouseout = function () {
+        mask.style.display = 'none'
+        big.style.display = 'none'
+    }
+    small.onmousemove = function (e) {
+        let mx=e.pageX;
+        let my=e.pageY;
+        // 计算黄色遮罩的位置
+     let x=mx - box.offsetLeft - mask.offsetWidth/2;
+     let y=my - box.offsetTop - mask.offsetHeight/2;
+    x=x<=0?0:x;
+    y=y<=0?0:y;
+    let xmax=small.offsetWidth - mask.offsetWidth;
+    let ymax=small.offsetHeight - mask.offsetHeight;
+    x=x>=xmax?xmax:x;
+    y=y>=ymax?ymax:y
+    mask.style.left=x+'px';
+    mask.style.top=y+'px';
+    // 计算大图片的位置
+    // 黄色遮罩的位置/遮罩的移动位置=大图的位置/大图的移动位置
+    // 黄色遮罩的位置*大图的移动位置/遮罩的移动位置=大图的位置
+    // 大图移动的距离
+    let bigimgXmax=bigimg.offsetWidth-big.offsetWidth;
+    let bigimgYmax=bigimg.offsetHeight-big.offsetHeight;
+    let bigimgX=x*bigimgXmax/xmax;
+    let bigimgY=y*bigimgYmax/ymax; 
+    bigimg.style.left=-bigimgX+'px'
+    bigimg.style.top=-bigimgY+'px'
+    }
+
 
 
 
 
 </script>
+
 </html>
